@@ -9,15 +9,16 @@ import Home from './pages/home';
 
 function App() {
 
-  const { isLoggedIn } = useAppSelector(state => state.auth.isLoggedIn)
+  const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
 
   return (
     <>
       <Router>
         <Routes>
-          {/* {isLoggedIn && <Route path='/' element={<Home/> } />} */}
-          <Route path='/' element={<LoginPage />} />
-          <Route path='/register' element={<Register />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/auth/*' element={<LoginPage />} />
+          <Route path='/auth/*' element={<Register />} />
         </Routes>
       </Router>
     </>

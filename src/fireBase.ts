@@ -2,6 +2,10 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import Swal from "sweetalert2";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
+
+// Firestore'u başlatmak için
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,11 +22,18 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth()
+const db = getFirestore(app);
 
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (email: string, password: string , userName: string) => {
   try {
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
     Swal.fire('Success', 'You are registered successfully!', 'success')
+    await setDoc(doc(db, "users", user.uid), {
+      username: userName,
+      email: user.email,
+      createdAt: new Date()
+    });
+
     return user;
   } catch (error: any) {
     const errorMessage = error?.message
@@ -33,7 +44,6 @@ export const signUp = async (email: string, password: string) => {
 export const signIn = async (email: string, password: string) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
-    Swal.fire('Success', 'You are logged in successfully!', 'success')
     return user;
   } catch (error: any) {
     const errorMessage = error?.message
