@@ -1,10 +1,10 @@
 import { FormEvent, useState } from "react"
-import CustomInput from "../assets/components/custom/CustomInput"
-import CustomButton from "../assets/components/custom/CustomButton"
 import { useAppDispatch } from "../redux/hooks/hooks"
 import { signIn } from "../fireBase"
 import { login } from "../redux/slices/auth"
 import { Link, useNavigate } from "react-router-dom"
+import CustomInput from "../components/custom/CustomInput"
+import CustomButton from "../components/custom/CustomButton"
 
 const Login = () => {
 
@@ -25,7 +25,11 @@ const Login = () => {
             setError(null);
             const user = await signIn(email, password);
             if (user) {
-                dispatch(login(user));
+                dispatch(login({
+                    id: user.uid,
+                    email: user.email,
+                    displayName: user.displayName,
+                }));
                 navigate('/', { replace: true });
             }
             setIsLoading(false);
@@ -50,7 +54,7 @@ const Login = () => {
                     label="Password"
                     onChange={(e) => setPAssword(e.target.value)}
                     placeholder="Enter your password"
-                    type="password" /* Add eye icon and function */
+                    type="password"
                     value={password}
                     error={error}
                 />
@@ -62,7 +66,7 @@ const Login = () => {
                     isLoading={isLoading}
                 />
                 <div className="text-center py-2 mt-2">
-                    <Link to={''} className="text-blue-700 w-fit">Forgot password? </Link>   {/* create forget password page */}
+                    <Link to={'/forgetPassword'} className="text-blue-700 w-fit">Forgot password? </Link>
                 </div>
             </form>
             <div className="flex justify-center mt-5">

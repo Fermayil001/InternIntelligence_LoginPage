@@ -1,21 +1,17 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-// Define the shape of your state
-interface AuthState {
-    isLoggedIn: boolean;
-    user: object | null;
-}
 
-const initialState: AuthState = {
-    isLoggedIn: false,
-    user: null,
+const userFromLocalStorage = localStorage.getItem('user');
+const initialState = {
+    isLoggedIn: userFromLocalStorage ? true : false,
+    user: userFromLocalStorage ? JSON.parse(userFromLocalStorage) : false,
 };
 
 const auth = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login(state, action: PayloadAction<object>) {
+        login(state, action) {
             localStorage.setItem('user', JSON.stringify(action.payload));
             state.isLoggedIn = true;
             state.user = action.payload;
@@ -23,7 +19,7 @@ const auth = createSlice({
         logout(state) {
             localStorage.removeItem('user');
             state.isLoggedIn = false;
-            state.user = null;
+            state.user = false;
         }
     }
 })

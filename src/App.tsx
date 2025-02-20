@@ -1,16 +1,10 @@
-// import { FormEvent, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
-// import { register } from './fireBase'
 import LoginPage from './pages/LoginPage';
-import Register from './pages/Register';
-import { useAppSelector } from './redux/hooks/hooks';
-import Home from './pages/home';
+import Home from './pages/Home';
+import ForgetPassword from './pages/ForgetPassword';
 
 function App() {
-
-  const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-
 
   return (
     <>
@@ -18,7 +12,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/auth/*' element={<LoginPage />} />
-          <Route path='/auth/*' element={<Register />} />
+          <Route path='/forgetPassword' element={<ForgetPassword />} />
         </Routes>
       </Router>
     </>
@@ -26,27 +20,3 @@ function App() {
 }
 
 export default App
-
-
-
-/* 
-<div className=' flex'>
-        <form onSubmit={handleSubmit} className='flex flex-col'>
-          Email
-          <input
-            className='border'
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          Password
-          <input
-            className='border'
-            type="password"
-            value={password}
-            onChange={(e) => setPAssword(e.target.value)}
-          />
-          <button type='submit'>Submit</button>
-        </form>
-      </div>
-*/

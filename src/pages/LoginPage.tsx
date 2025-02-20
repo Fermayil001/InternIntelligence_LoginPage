@@ -11,15 +11,15 @@ const LoginPage = () => {
 
     return (
         <div className="h-screen w-screen flex justify-center items-center">
-            <div className='w-[90%] border h-[90vh] flex'>
+            <div className='w-full sm:w-[90%] h-[90vh] flex flex-col sm:flex-row'>
                 <div
-                    className={`w-1/2 bg-cover bg-center`}
+                    className={`w-[20%] mx-auto rounded-full sm:rounded-lg h-full sm:w-1/2 bg-contain sm:bg-cover bg-no-repeat bg-center`}
                     style={{ backgroundImage: `url(${BgImage})` }}
                 >
                 </div>
 
-                <div className='w-1/2 border flex items-center justify-center'>
-                    {isLogin ? <Login /> : <Register/> }
+                <div className='w-full sm:w-1/2 flex items-center justify-center'>
+                    {isLogin ? <Login /> : <Register />}
                 </div>
             </div>
         </div>

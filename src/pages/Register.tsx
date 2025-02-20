@@ -1,10 +1,12 @@
 import { FormEvent, useState } from "react";
-import CustomInput from "../assets/components/custom/CustomInput";
-import CustomButton from "../assets/components/custom/CustomButton";
-import { signUp } from "../fireBase"; // Firebase signUp fonksiyonunuz
+import { signUp } from "../fireBase";
 import { useAppDispatch } from "../redux/hooks/hooks";
 import { login } from "../redux/slices/auth";
 import { Link, useNavigate } from "react-router-dom";
+import { updateProfile } from "firebase/auth";
+import Swal from "sweetalert2";
+import CustomInput from "../components/custom/CustomInput";
+import CustomButton from "../components/custom/CustomButton";
 
 const Register = () => {
     const dispatch = useAppDispatch();
@@ -12,7 +14,7 @@ const Register = () => {
 
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [username, setUsername] = useState<string>(''); // Kullanıcı adı state'i ekledik
+    const [username, setUsername] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -25,13 +27,18 @@ const Register = () => {
         } else {
             setError(null);
             try {
-                const user = await signUp(email, password, username); // username parametresi ile signUp fonksiyonu çağırılıyor
+                const user = await signUp(email, password);
                 if (user) {
+                    await updateProfile(user, {
+                        displayName: username,
+                    });
                     dispatch(login(user));
-                    navigate('/', { replace: true });
+                    navigate('/auth/login', { replace: true });
                 }
-            } catch (err) {
-                setError('Kullanıcı kaydı sırasında bir hata oluştu.');
+                Swal.fire('Success', 'You are registered successfully!', 'success')
+
+            } catch (err: any) {
+                setError(err?.message);
             } finally {
                 setIsLoading(false);
             }
@@ -45,7 +52,7 @@ const Register = () => {
                 <CustomInput
                     id="3"
                     label="Name"
-                    onChange={(e) => setUsername(e.target.value)} // username state'i
+                    onChange={(e) => setUsername(e.target.value)}
                     placeholder="Enter your name"
                     type="text"
                     value={username}

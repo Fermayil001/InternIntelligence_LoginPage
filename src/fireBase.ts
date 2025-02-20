@@ -1,15 +1,8 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth'
 import Swal from "sweetalert2";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
 
-// Firestore'u başlatmak için
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAskjtPbKnPhGo_ScawINcfBfVV00W9ueM",
   authDomain: "login-page-d70ca.firebaseapp.com",
@@ -19,21 +12,13 @@ const firebaseConfig = {
   appId: "1:815515111636:web:a2fc961a528f76d0fe6b41"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth()
-const db = getFirestore(app);
+const user = getAuth().currentUser;
 
-export const signUp = async (email: string, password: string , userName: string) => {
+export const signUp = async (email: string, password: string) => {
   try {
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
-    Swal.fire('Success', 'You are registered successfully!', 'success')
-    await setDoc(doc(db, "users", user.uid), {
-      username: userName,
-      email: user.email,
-      createdAt: new Date()
-    });
-
     return user;
   } catch (error: any) {
     const errorMessage = error?.message
@@ -63,7 +48,14 @@ export const handleSignOut = async () => {
   }
 }
 
-
+export const handleResetPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email)
+    return true;
+  } catch (error: any) {
+    
+  }
+}
 
 
 export default app;
